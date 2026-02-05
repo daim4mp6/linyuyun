@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>森林小憩 - 老師匿名心情空間</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #f3f4ed; }
+        .forest-gradient { background: linear-gradient(135deg, #718355 0%, #87986a 100%); }
+        .diary-card { transition: transform 0.2s; }
+        .diary-card:hover { transform: translateY(-5px); }
+    </style>
+</head>
+<body class="min-h-screen text-stone-700">
+
+    <nav class="forest-gradient text-white p-4 shadow-lg">
+        <div class="max-w-2xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold flex items-center gap-2">🌲 森林小憩</h1>
+            <span class="text-sm opacity-90">給老師的匿名心情樹洞</span>
+        </div>
+    </nav>
+
+    <main class="max-w-2xl mx-auto p-4 pb-20">
+        
+        <section class="bg-white rounded-3xl p-6 shadow-sm border border-stone-200 mb-8 mt-4">
+            <h2 class="text-lg font-medium mb-4 text-stone-600">現在的心情是...？</h2>
+            <div class="flex gap-2 mb-4 overflow-x-auto pb-2">
+                <button onclick="selectMood('🌱 充滿希望')" class="mood-btn px-4 py-2 rounded-full border border-stone-200 hover:bg-green-50">🌱 充滿希望</button>
+                <button onclick="selectMood('☁️ 有點壓力')" class="mood-btn px-4 py-2 rounded-full border border-stone-200 hover:bg-green-50">☁️ 有點壓力</button>
+                <button onclick="selectMood('🍂 感到疲憊')" class="mood-btn px-4 py-2 rounded-full border border-stone-200 hover:bg-green-50">🍂 感到疲憊</button>
+                <button onclick="selectMood('🌙 需要安靜')" class="mood-btn px-4 py-2 rounded-full border border-stone-200 hover:bg-green-50">🌙 需要安靜</button>
+            </div>
+            <textarea id="diaryContent" rows="3" class="w-full p-4 bg-stone-50 rounded-2xl border-none focus:ring-2 focus:ring-green-200 outline-none" placeholder="分享一下今天的校園心情..."></textarea>
+            <div class="flex justify-end mt-4">
+                <button onclick="postDiary()" class="forest-gradient text-white px-8 py-2 rounded-full hover:opacity-90 transition shadow-md">發佈到樹洞</button>
+            </div>
+        </section>
+
+        <div id="diaryWall" class="space-y-6">
+            <div class="diary-card bg-white rounded-2xl p-6 shadow-sm border border-stone-100">
+                <div class="flex justify-between items-start mb-3">
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">🍂 感到疲憊</span>
+                    <span class="text-stone-400 text-xs">來自：隱匿的貓頭鷹</span>
+                </div>
+                <p class="text-stone-600 leading-relaxed mb-4">今天班上的孩子情緒起伏很大，處理了一整天，感覺自己的電力都耗盡了...</p>
+                <div class="border-t border-stone-50 pt-4">
+                    <div class="text-sm text-stone-500 mb-2">3 則溫暖回覆</div>
+                    <button class="text-green-600 text-sm font-medium hover:underline">查看或給予建議</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let selectedMood = "🌱 充滿希望";
+        
+        function selectMood(mood) {
+            selectedMood = mood;
+            // 簡單變更按鈕顏色視覺反饋
+            document.querySelectorAll('.mood-btn').forEach(btn => {
+                btn.classList.remove('bg-green-100', 'border-green-300');
+            });
+            event.target.classList.add('bg-green-100', 'border-green-300');
+        }
+
+        function postDiary() {
+            const content = document.getElementById('diaryContent').value;
+            if (!content) return alert("請寫下一點文字吧");
+
+            const wall = document.getElementById('diaryWall');
+            const newDiary = document.createElement('div');
+            newDiary.className = "diary-card bg-white rounded-2xl p-6 shadow-sm border border-stone-100 animate-fade-in";
+            
+            const animalNames = ["晨曦的小鹿", "悠閒的樹懶", "堅強的橡樹", "溫柔的微風"];
+            const randomName = animalNames[Math.floor(Math.random() * animalNames.length)];
+
+            newDiary.innerHTML = `
+                <div class="flex justify-between items-start mb-3">
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">${selectedMood}</span>
+                    <span class="text-stone-400 text-xs">來自：${randomName}</span>
+                </div>
+                <p class="text-stone-600 leading-relaxed mb-4">${content}</p>
+                <div class="border-t border-stone-50 pt-4">
+                    <div class="text-sm text-stone-500 mb-2">剛剛發布</div>
+                    <button class="text-green-600 text-sm font-medium hover:underline">給予溫暖回覆</button>
+                </div>
+            `;
+            wall.prepend(newDiary);
+            document.getElementById('diaryContent').value = "";
+        }
+    </script>
+</body>
+</html>
